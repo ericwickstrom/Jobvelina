@@ -1,12 +1,16 @@
 using Application.Interfaces;
 using Infrastructure.Services;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<JobvelinaDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register application services
-builder.Services.AddScoped<IJobService, MockJobService>();
+builder.Services.AddScoped<IJobService, JobService>();
 
 // Add controllers
 builder.Services.AddControllers();
@@ -78,7 +82,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "JobVelina API v1");
-        c.RoutePrefix = string.Empty; // Serve Swagger UI at root (http://localhost:5000)
+        c.RoutePrefix = "swagger";
         c.DisplayRequestDuration(); // Show request duration in UI
     });
 }
