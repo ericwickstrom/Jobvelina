@@ -45,8 +45,8 @@ public class UpdateJobDto
     public Guid Id { get; set; }
     public string? Company { get; set; }
     public string? Position { get; set; }
-    public JobStatus? Status { get; set; }
-    public DateTime? ApplicationDate { get; set; }
+    public JobStatus Status { get; set; }
+    public DateTime ApplicationDate { get; set; }
     public string? Description { get; set; }
     public string? Salary { get; set; }
     public string? JobPostingUrl { get; set; }
