@@ -1,16 +1,11 @@
 using Application.Interfaces;
 using Infrastructure.Services;
-using Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<JobvelinaDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Register application services
-builder.Services.AddScoped<IJobService, JobService>();
+// Using MockJobService for in-memory data storage (no database required)
+builder.Services.AddScoped<IJobService, MockJobService>();
 
 // Add controllers
 builder.Services.AddControllers();

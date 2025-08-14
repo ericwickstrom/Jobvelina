@@ -72,6 +72,20 @@ namespace Infrastructure.Services
                     CreatedAt = DateTime.UtcNow.AddDays(-10),
                     UpdatedAt = DateTime.UtcNow.AddDays(-2),
                     ApplicationDate = DateTime.UtcNow.AddDays(-10)
+                },
+                new Job
+                {
+                    Id = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc"),
+                    CompanyId = _companies[2].Id,
+                    Company = _companies[2],
+                    Position = "Junior Backend Developer",
+                    Description = "Join our growing startup to work on exciting microservices architecture. Great learning opportunity!",
+                    Salary = "$70,000 - $90,000",
+                    JobPostingUrl = "https://startuphub.com/jobs/junior-backend",
+                    Status = JobStatus.Rejected,
+                    CreatedAt = DateTime.UtcNow.AddDays(-15),
+                    UpdatedAt = DateTime.UtcNow.AddDays(-7),
+                    ApplicationDate = DateTime.UtcNow.AddDays(-15)
                 }
             };
         }
@@ -152,7 +166,7 @@ namespace Infrastructure.Services
                 }
 
                 // Find or create company if changed
-                if (!job.Company.Name.Equals(updateJobDto.Company, StringComparison.OrdinalIgnoreCase))
+                if (!string.IsNullOrEmpty(updateJobDto.Company) && !job.Company.Name.Equals(updateJobDto.Company, StringComparison.OrdinalIgnoreCase))
                 {
                     var company = _companies.FirstOrDefault(c => c.Name.Equals(updateJobDto.Company, StringComparison.OrdinalIgnoreCase));
                     if (company == null)
@@ -172,17 +186,13 @@ namespace Infrastructure.Services
                 }
 
                 // Update job properties
-                if (updateJobDto.Position != null) job.Position = updateJobDto.Position;
+                if (!string.IsNullOrEmpty(updateJobDto.Position)) job.Position = updateJobDto.Position;
                 if (updateJobDto.Description != null) job.Description = updateJobDto.Description;
                 if (updateJobDto.Salary != null) job.Salary = updateJobDto.Salary;
                 if (updateJobDto.JobPostingUrl != null) job.JobPostingUrl = updateJobDto.JobPostingUrl;
-                if (updateJobDto.Status.HasValue) job.Status = updateJobDto.Status.Value;
+                job.Status = updateJobDto.Status;
                 job.UpdatedAt = DateTime.UtcNow;
-
-                if (updateJobDto.ApplicationDate.HasValue)
-                {
-                    job.ApplicationDate = updateJobDto.ApplicationDate.Value;
-                }
+                job.ApplicationDate = updateJobDto.ApplicationDate;
 
                 return MapToDto(job);
             }
